@@ -1,0 +1,17 @@
+{% include './partials/header.html' %}
+{% include './partials/navbar.html' %}
+<main class="container mt-5">
+    {% block content %}
+    <div class="panel">
+        <h1>Welcome To The Our Library</h1>
+        <p>
+            If you want to read more books or tutorials you can register
+            on our library and issues books
+        </p>
+        <a href="register.html" class="btn btn-primary">
+            Register as Student
+        </a>
+    </div>
+    {% endblock content %}
+</main>
+{% include './partials/footer.html' %}

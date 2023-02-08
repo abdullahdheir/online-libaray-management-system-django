@@ -1,0 +1,7 @@
+@import url("./bootstrap.min.css");
+@import url("./all.min.css");
+@import url("./dataTables.bootstrap5.min.css");
+
+a {
+    text-decoration: none;
+}
