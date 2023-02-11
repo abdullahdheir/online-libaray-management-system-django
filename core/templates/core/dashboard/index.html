@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-6 col-sm-6 mb-3">
+        <div class="card text-dark bg-warning">
+            <h5 class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="title">Students</div>
+                    <div class="toggle-icon" style="cursor: pointer">
+                        <i class="fas fa-minus"></i>
+                    </div>
+                </div>
+            </h5>
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-sm-12">
+                        <a href="{% url 'core:students_list' %}" class="btn w-100 btn-dark"><i class="fa fa-list"></i></a>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-12">
+                        <div class="d-flex justify-content-between">
+                            <strong>Total Students</strong>
+                            <div>{{ total_students }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-12">
+                        <div class="d-flex justify-content-between">
+                            <strong>Issued</strong>
+                            <div>20</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-sm-6 mb-3">
+        <div class="card text-light bg-dark">
+            <h5 class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="title">Books</div>
+                    <div class="toggle-icon" style="cursor: pointer">
+                        <i class="fa fa-minus"></i>
+                    </div>
+                </div>
+            </h5>
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <a href="{% url 'core:book_form' %}" class="btn w-100 btn-warning"><i class="fa fa-plus"></i></a>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="{% url 'core:books_list' %}" class="btn w-100 btn-warning"><i class="fa fa-list"></i></a>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-12">
+                        <div class="d-flex justify-content-between">
+                            <strong>Total Books</strong>
+                            <div>{{ total_books }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-sm-12">
+                        <div class="d-flex justify-content-between">
+                            <strong>Issued</strong>
+                            <div>{{ total_issue_books }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

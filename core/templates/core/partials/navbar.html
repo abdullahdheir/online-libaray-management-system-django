@@ -1,7 +1,8 @@
+{% load auth_check %}
 <header>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container justify-content-between">
-            <a class="navbar-brand" href="./index.html">Online Library Management System</a>
+            <a class="navbar-brand" href="{% url 'core:home' %}">Online Library Management System</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -22,9 +23,11 @@
                             <li>
                                 <a class="dropdown-item" href="{% url 'core:profile' %}">My Profile</a>
                             </li>
+                            {% if user|has_group:"admin" %}
                             <li>
-                                <a class="dropdown-item" href="./Dashboard/index.html">Dashboard</a>
+                                <a class="dropdown-item" href="{% url 'core:dashboard' %}">Dashboard</a>
                             </li>
+                            {% endif %}
                             <li>
                                 <hr class="dropdown-divider" />
                             </li>

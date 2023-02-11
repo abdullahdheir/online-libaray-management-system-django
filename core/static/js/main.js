@@ -11,7 +11,7 @@ $(() => {
                     position: "center", // `left`, `center` or `right`
                     stopOnFocus: true, // Prevents dismissing of toast on hover
                     style: {
-                        background: "green",
+                        background: "#32CD32",
                     },
                 }).showToast();
                 break;
@@ -25,25 +25,12 @@ $(() => {
                     position: "center", // `left`, `center` or `right`
                     stopOnFocus: true, // Prevents dismissing of toast on hover
                     style: {
-                        background: "red",
+                        background: "#FF5349",
                     },
                 }).showToast();
                 break;
         }
     };
-    const user_id = JSON.parse(document.getElementById("user_id").textContent);
-    const user_first_name = JSON.parse(
-        document.getElementById("user_first_name").textContent
-    );
-    const user_last_name = JSON.parse(
-        document.getElementById("user_last_name").textContent
-    );
-    const user_username = JSON.parse(
-        document.getElementById("user_username").textContent
-    );
-    const user_email = JSON.parse(
-        document.getElementById("user_email").textContent
-    );
 
     /* Start General Logic */
     $("#dataTable").DataTable({
@@ -101,56 +88,56 @@ $(() => {
     const emailPattern =
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    $(document).on('change',"#firstNameInput",(e) => {
+    $(document).on("change", "#firstNameInput", (e) => {
         $(".firstName").remove();
         $("#firstNameInput").removeClass("is-invalid");
     });
-    $(document).on('change',"#lastNameInput",(e) => {
+    $(document).on("change", "#lastNameInput", (e) => {
         $(".lastName").remove();
         $("#lastNameInput").removeClass("is-invalid");
     });
-    $(document).on('change',"#usernameInput",(e) => {
+    $(document).on("change", "#usernameInput", (e) => {
         $(".username").remove();
         $("#usernameInput").removeClass("is-invalid");
     });
-    $(document).on('change',"#emailInput",(e) => {
+    $(document).on("change", "#emailInput", (e) => {
         $(".email").remove();
         $("#emailInput").removeClass("is-invalid");
     });
-    $(document).on('change',"#oldPasswordInput",(e) => {
-        console.log('ee');
+    $(document).on("change", "#oldPasswordInput", (e) => {
+        console.log("ee");
         $(".oldPassword").remove();
         $("#oldPasswordInput").removeClass("is-invalid");
     });
-    $(document).on('change',"#passwordInput",(e) => {
+    $(document).on("change", "#passwordInput", (e) => {
         $(".password").remove();
         $("#passwordInput").removeClass("is-invalid");
     });
-    $(document).on('change',"#passwordConfirmInput",(e) => {
+    $(document).on("change", "#passwordConfirmInput", (e) => {
         $(".confirmPassword").remove();
         $("#passwordConfirmInput").removeClass("is-invalid");
     });
-    $(document).on('change',"#oldPasswordInput",(e) => {
+    $(document).on("change", "#oldPasswordInput", (e) => {
         $(".oldPassword").remove();
         $("#oldPasswordInput").removeClass("is-invalid");
     });
-    $(document).on('change',"#imageInput",(e) => {
+    $(document).on("change", "#imageInput", (e) => {
         $(".image").remove();
         $("#imageInput").removeClass("is-invalid");
     });
-    $(document).on('change',"#titleInput",(e) => {
+    $(document).on("change", "#titleInput", (e) => {
         $(".title").remove();
         $("#titleInput").removeClass("is-invalid");
     });
-    $(document).on('change',"#descriptionInput",(e) => {
+    $(document).on("change", "#descriptionInput", (e) => {
         $(".description").remove();
         $("#descriptionInput").removeClass("is-invalid");
     });
-    $(document).on('change',"#authorInput",(e) => {
+    $(document).on("change", "#authorInput", (e) => {
         $(".author").remove();
         $("#authorInput").removeClass("is-invalid");
     });
-    $(document).on('change',"#quantityInput",(e) => {
+    $(document).on("change", "#quantityInput", (e) => {
         $(".quantity").remove();
         $("#quantityInput").removeClass("is-invalid");
     });
@@ -418,7 +405,12 @@ $(() => {
 
     $(document).on("click", ".edit-profile-main", function (e) {
         e.preventDefault();
-
+        const user_first_name = JSON.parse(
+            document.getElementById("user_first_name").textContent
+        );
+        const user_last_name = JSON.parse(
+            document.getElementById("user_last_name").textContent
+        );
         const form = `<form class="profile-main-form" role="form">
                             <!-- Start from row no 1 -->
                             <div class="row">
@@ -453,6 +445,7 @@ $(() => {
 
     $(document).on("submit", ".profile-main-form", function (e) {
         e.preventDefault();
+
         const firstNameInput = $("#firstNameInput");
         const firstName = firstNameInput.val();
         const lastNameInput = $("#lastNameInput");
@@ -503,6 +496,10 @@ $(() => {
     /* Start Account Logic */
     $(document).on("click", ".edit-account-username", function (e) {
         e.preventDefault();
+
+        const user_username = JSON.parse(
+            document.getElementById("user_username").textContent
+        );
         const form = `<form class="account-username-form" role="form">
                             <!-- Start from row no 1 -->
                             <div class="row">
@@ -524,6 +521,9 @@ $(() => {
         modal("Edit Username", form);
     });
     $(document).on("click", ".edit-account-email", function (e) {
+        const user_email = JSON.parse(
+            document.getElementById("user_email").textContent
+        );
         e.preventDefault();
         const form = `<form class="account-email-form" role="form">
                             <!-- Start from row no 1 -->
@@ -785,4 +785,79 @@ $(() => {
         }
     });
     /* End Account Logic */
+
+    /* Start Issue Book Logic */
+    $(document).on("click", "#issue-btn", function (e) {
+        e.preventDefault();
+        const bookId = $(this).data("id");
+        const url = $(this).attr("href");
+        if (bookId && url) {
+            $.ajax({
+                type: "post",
+                url: url,
+                data: {
+                    book: bookId,
+                },
+                success: function (res) {
+                    if (res.status === "success") {
+                        $(document).find("#issue")
+                            .html(`<p class="alert text-center alert-info">
+                You already have an issue with this book
+            </p>`);
+                        toast("Book Issued Successfully", "success");
+                    } else {
+                        const err = JSON.parse(res.error);
+                        if (err?.book) toast(err.book[0].message, "error");
+                    }
+                },
+            });
+        }
+    });
+    /* End Issue Book Logic */
+    $(document).on("click", ".picture-uploader", function (e) {
+        e.preventDefault();
+        $(document).find("#imageInput").click();
+    });
+    $(document).on("change", "#imageInput", function (e) {
+        const picture = $(this).prop("files")[0];
+        if (picture) {
+            const allowedExtensions = ["jpg", "jpeg", "png", "jfif"];
+            if (picture.size > 4177920) {
+                return toast(
+                    "Image size must be lower 4MB, please choose a different image.",
+                    "error"
+                );
+            } else if (
+                !allowedExtensions.includes(picture.name.split(".").pop())
+            ) {
+                return toast("Allowed image extensions are jpg, jpeg, png, jfif",'error');
+            }
+            $(".profile-picture img").attr("src", URL.createObjectURL(picture));
+            $(".profile-picture img").attr("alt", picture.name);
+            const data = new FormData();
+            data.append("picture", picture);
+            if (picture) {
+                $.ajax({
+                    type: "POST",
+                    url: "/profile/picture/update",
+                    contentType: "multipart/form-data",
+                    processData: false,
+                    contentType: false,
+                    data: data,
+                    success: function (res) {
+                        if (res.status === "success")
+                            toast(res.message, "success");
+                        else {
+                            const err = JSON.parse(res.error);
+                            if (err?.picture)
+                                toast(err.picture[0].message, "error");
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    },
+                });
+            }
+        }
+    });
 });

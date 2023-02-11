@@ -1,19 +1,56 @@
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import UpdateView
-from core.models import (Profile)
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import (ListView, TemplateView, CreateView)
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.models import User
-from django.http import HttpRequest, HttpResponse, JsonResponse
-from core.forms import (ProfileForm, UserForm)
-from django.core.exceptions import ValidationError
-import json
+from django.contrib.auth.models import User, Group
+from django.http import (HttpRequest, JsonResponse,
+                         Http404, HttpResponseRedirect)
+from core.forms import (BookForm, UserForm, ProfileForm)
+from django.core.exceptions import (ValidationError, ObjectDoesNotExist)
+from django.contrib.auth.decorators import (login_required)
+from authentication.utils import group_required
+from books.models import (Book, BookIssue)
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib import messages
+from books.models import (BookIssue)
+
 
 # Create your views here.
+@method_decorator([login_required(login_url=reverse_lazy('login'))], name='dispatch')
+class ProfileView(TemplateView):
+    template_name = 'core/profile/index.html'
+
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['issues_books_list'] = BookIssue.objects.filter(
+            student=self.request.user.id, borrow_date=None)
+        return context
 
 
 @csrf_exempt
-def update_profile(request: HttpRequest):
+def profile_picture_update(request: HttpRequest):
+    try:
+        if request.method == 'POST':
+            if request.user.is_authenticated:
+                profile_form = ProfileForm(
+                    files=request.FILES, instance=request.user.profile)
+                if profile_form.is_valid():
+                    profile_form.save()
+                    return JsonResponse({'status': 'success', "message": "Profile picture updated"})
+                else:
+                    raise ValidationError(profile_form.errors)
+            else:
+                raise ValidationError(
+                    "You must be logged in to update your profile picture")
+        else:
+            return HttpResponseRedirect(reverse_lazy('core:profile'))
+    except ValidationError as error:
+            return JsonResponse({"status": "error", "error": error.messages})
+
+@csrf_exempt
+def profile_update(request: HttpRequest):
     try:
         if request.method == 'POST':
             if request.user.is_authenticated:
@@ -36,6 +73,68 @@ def update_profile(request: HttpRequest):
             else:
                 raise ValidationError(
                     'You must be logged in to update your profile')
+        else:
+            return HttpResponseRedirect(reverse_lazy('core:profile'))
     except ValidationError as error:
         return JsonResponse({"status": "error", "error": error.messages})
 
+
+@method_decorator([login_required(login_url=reverse_lazy('login')), group_required(['admin'], login_url=reverse_lazy('login'))], name='dispatch')
+class DashboardView(TemplateView):
+    template_name = 'core/dashboard/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_books'] = Book.objects.all().count()
+        context['total_issue_books'] = BookIssue.objects.all().count()
+        context['total_students'] = User.objects.filter(is_superuser=False, is_staff=False,
+                                                        ).exclude(groups=(Group.objects.get(name="admin").pk)).count()
+        return context
+
+
+@method_decorator([login_required(login_url=reverse_lazy('login')), group_required(['admin'], login_url=reverse_lazy('login'))], name='dispatch')
+class StudentListView(ListView):
+    template_name = 'core/dashboard/students_list.html'
+    context_object_name = 'students_list'
+
+    def get_queryset(self):
+        return User.objects.filter(is_superuser=False, is_staff=False,
+                                   ).exclude(groups=(Group.objects.get(name="admin").pk))
+
+
+@login_required(login_url=reverse_lazy('login'))
+@group_required(['admin'], login_url=reverse_lazy('login'))
+def student_delete(request: HttpRequest, pk: int):
+    try:
+        student = get_object_or_404(User, pk=pk)
+        student.delete()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    except ObjectDoesNotExist:
+        return Http404("Student does not exist")
+
+
+@method_decorator([login_required(login_url=reverse_lazy('login')), group_required(['admin'], login_url=reverse_lazy('login'))], name='dispatch')
+class BookListView(ListView):
+    template_name = 'core/dashboard/books_list.html'
+    context_object_name = 'books_list'
+    model = Book
+
+
+@login_required(login_url=reverse_lazy('login'))
+@group_required(['admin'], login_url=reverse_lazy('login'))
+def book_delete(request: HttpRequest, pk: int):
+    try:
+        book = get_object_or_404(Book, pk=pk)
+        book.delete()
+        messages.success(request, 'Book deleted successfully')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    except ObjectDoesNotExist:
+        return Http404("book does not exist")
+
+
+@method_decorator([login_required(login_url=reverse_lazy('login')), group_required(['admin'], login_url=reverse_lazy('login'))], name='dispatch')
+class BookCreateListView(SuccessMessageMixin, CreateView):
+    template_name = 'core/dashboard/book_form.html'
+    form_class = BookForm
+    success_url = reverse_lazy('core:book_form')
+    success_message = "Book created successfully"

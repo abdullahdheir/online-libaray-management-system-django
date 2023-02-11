@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">Add Book</div>
+    <div class="card-body">
+        <form method="post" id="add-book-form" class="form-group" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- Start from row no 1 -->
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Image</label>
+                    <input type="file" id="imageInput"
+                        class="form-control {% if form.image.errors %}is-invalid {% endif %}" name="image"
+                        accept="image/*" />
+                    {% if form.errors.image %} <span
+                        class='image invalid-feedback'>{{ form.errors.image|first }}</span>{% endif %}
+                </div>
+            </div>
+            <!-- End from row no 1 -->
+            <!-- Start from row no 2 -->
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Title</label>
+                    <input type="text" id="titleInput"
+                        class="form-control {% if form.title.errors %}is-invalid {% endif %}" placeholder="Book title"
+                        name="title" />
+                    {% if form.errors.title %} <span
+                        class='title invalid-feedback'>{{ form.errors.title|first }}</span>{% endif %}
+                </div>
+            </div>
+            <!-- End from row no 2 -->
+            <!-- Start from row no 3 -->
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Description </label>
+                    <textarea id="descriptionInput"
+                        class="form-control {% if form.description.errors %}is-invalid {% endif %}"
+                        placeholder="Book description" name="description" rows="5"></textarea>
+                    {% if form.errors.description %} <span
+                        class='description invalid-feedback'>{{ form.errors.description|first }}</span>{% endif %}
+                </div>
+            </div>
+            <!-- End from row no 3 -->
+            <!-- Start from row no 4 -->
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Author</label>
+                    <input type="text" id="authorInput"
+                        class="form-control {% if form.author.errors %}is-invalid {% endif %}" placeholder="Book Author"
+                        name="author" />
+                    {% if form.errors.author %} <span
+                        class='author invalid-feedback'>{{ form.errors.author|first }}</span>{% endif %}
+                </div>
+            </div>
+            <!-- End form row no 4 -->
+            <!-- Start from row no 5 -->
+            <div class="row mb-3">
+                <div class="col">
+                    <label class="form-label">Quantity</label>
+                    <input type="number" id="quantityInput"
+                        class="form-control {% if form.quantity.errors %}is-invalid {% endif %}"
+                        placeholder="Book Quantity" name="quantity" />
+                    {% if form.errors.quantity %} <span
+                        class='quantity invalid-feedback'>{{ form.errors.quantity|first }}</span>{% endif %}
+                </div>
+            </div>
+            <!-- End form row no 5 -->
+            <!-- Start form row no 6 -->
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">
+                    Add new book
+                </button>
+                <a href="{% url 'core:books_list' %}" class="btn btn-secondary">
+                    Cancel
+                </a>
+            </div>
+            <!-- End from row no 6 -->
+        </form>
+    </div>
+</div>
+{% endblock content %}

@@ -1,9 +1,31 @@
 {% load static %}
-<script src="{% static 'js/bootstrap.min.js' %}" ></script>
-<script src="{% static 'js/bootstrap.bundle.min.js' %}" ></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-<script src="{% static 'js/query.min.js' %}" ></script>
-<script src="{% static 'js/datatables.min.js' %}" ></script>
-<script src="{% static 'js/main.js' %}" ></script>
+
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'js/toastify.min.js' %}"></script>
+<script src="{% static 'js/query.min.js' %}"></script>
+<script src="{% static 'js/datatables.min.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+{% if messages %}
+{% for message in messages %}
+{{ message.tag }}
+<script type="text/javascript">
+    $(() => {
+        Toastify({
+            text: "{{ message }}",
+            duration: 3000,
+            newWindow: true,
+            close: true,
+            gravity: "top", // `top` or `bottom`
+            position: "center", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+                background: "#32CD32",
+            },
+        }).showToast();
+    });
+</script>
+{% endfor %}
+{% endif %}
 </body>
+
 </html>

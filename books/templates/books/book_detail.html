@@ -25,12 +25,24 @@
                 <span class="text-muted">{{ book.author }}</span>
             </div>
         </div>
-        <div class="row mb-4">
-            <div>
-                <button class="btn w-100 btn-secondary">
-                    Issue
-                </button>
-            </div>
+        <div id="issue" class="row mb-4">
+            {% if user.is_authenticated %}
+            {% if not issued %}
+            <a href="{% url 'books:book_issue' %}" data-id="{{ book.id }}" id="issue-btn"
+                class="btn w-100 btn-secondary">
+                Issue
+            </a>
+            {% else %}
+            <p class="alert text-center alert-info">
+                You already have an issue with this book
+            </p>
+            {% endif %}
+            {% else %}
+            <a href="{% url 'login' %}?next={{ request.get_full_path }}" class="btn w-100 btn-secondary">
+                Login to issue
+            </a>
+            {% endif %}
+
         </div>
     </div>
 </div>

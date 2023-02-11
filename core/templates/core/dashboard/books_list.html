@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a href="{% url 'core:book_form' %}" class="btn btn-primary mb-3"><i class="fa fa-plus"></i>&nbsp;Add Book</a>
+<table id="dataTable" class="table table-striped" style="width: 100%">
+    <thead>
+        <tr>
+            <th scope="row">ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Author</th>
+            <th>In Stock</th>
+            <th>Issued</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in books_list %}
+        <tr>
+            <th scope="row">{{ book.id }}</th>
+            <td>{{ book.title }}</td>
+            <td>{{ book.description }}</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.quantity }}</td>
+            <td>2013-08-11</td>
+            <td class="">
+                <a href="{% url 'core:book_delete' book.id %}" onclick="confirm('Are you sure?')" class="text-danger"><i
+                        class="fa fa-trash"></i>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

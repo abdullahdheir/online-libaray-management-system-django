@@ -11,7 +11,6 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.http import JsonResponse
 from django.core.exceptions import ValidationError
 from django.contrib.auth import update_session_auth_hash
-import json
 # Create your views here.
 
 @csrf_exempt

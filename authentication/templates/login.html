@@ -1,14 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-{% if messages %}
-<div class="col-lg-6 col-sm-8 mx-auto text-center">
-    <div class="messages">
-        {% for message in messages %}
-        <p{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</p>
-            {% endfor %}
-    </div>
-</div>
-{% endif %}
+
 <div class="card col-lg-6 col-sm-8 mx-auto">
     <div class="card-header">Login</div>
     <div class="card-body">
@@ -16,9 +8,7 @@
             {% csrf_token %}
             {% if form.errors %}
             <div class="alert alert-danger " role="alert">
-                {% for err in form.non_field_errors %}
-                {{ err }}
-                {% endfor %}
+                {{form.non_field_errors|first}}
             </div>
             {% endif %}
             <!-- Start from row no 1 -->
@@ -35,7 +25,8 @@
             <div class="row mb-3">
                 <label class="col-sm-3 form-label">Password </label>
                 <div class="col-sm-9">
-                    <input type="password" id="passwordInput" class="form-control" placeholder="password" name="password" />
+                    <input type="password" id="passwordInput" class="form-control" placeholder="password"
+                        name="password" />
                 </div>
             </div>
             <!-- End from row no 2 -->

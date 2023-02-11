@@ -5,9 +5,13 @@
     <h5 class="card-header">Profile</h5>
     <div class="card-body">
         <div class="row">
-            <div class="col-sm-4 mb-2">
-                <img src="{% if user.user.profile.picture  %} user.profile.picture.url {% else %} {% static 'images/default_user.jpg' %} {% endif %}"
-                    class="rounded-circle" width="100px" title="no image" alt="User Picture" />
+            <div class="col-sm-4 mb-2 ">
+                <div class="profile-picture">
+                    <img src="{% if user.profile.picture  %} {{ user.profile.picture.url }} {% else %} {% static 'images/default_user.jpg' %} {% endif %}"
+                        class="rounded-circle " width="100px" title="no image" alt="User Picture" />
+                    <span class="picture-uploader"><i class="fa fa-upload"></i></span>
+                    <input type="file" name="image" class="d-none" id="imageInput">
+                </div>
             </div>
             <div class="col-sm-8" id="edit-form">
                 <div class="row">
@@ -64,5 +68,20 @@
         </div>
     </div>
 </div>
-<form action="" enctype="application/x-www-form-urlencoded"></form>
+{% if issues_books_list %}
+<div class="card mb-3">
+    <h5 class="card-header">Issued Book</h5>
+    <div class="card-body">
+        {% for issue_book in issues_books_list %}
+        <div class="d-flex justify-content-between">
+            <div class="fs-6 fw-bold"><a href="{% url 'books:book_detail' issue_book.book.id %}"
+                    class="text-dark">{{ issue_book.book.title }}</a></div>
+            <div class="text-danger">
+                <a href="{% url 'books:book_borrow' issue_book.id %}" class="text-warning">Borrow</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
 {% endblock content %}
