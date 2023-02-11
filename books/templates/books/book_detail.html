@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-sm-5 mb-5">
+        <img src="{{ book.image.url }}" alt="{{ book.title }}" width="100%" height="500px" />
+    </div>
+    <div class="col-sm-7">
+        <div class="row mb-4">
+            <h5>{{ book.title }}</h5>
+        </div>
+        <div class="row mb-4">
+            <div>
+                {{ book.description }}
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div>
+                <strong>Available:</strong>
+                <span class="text-muted">10</span>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div>
+                <strong>Author:</strong>
+                <span class="text-muted">{{ book.author }}</span>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div>
+                <button class="btn w-100 btn-secondary">
+                    Issue
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content%}

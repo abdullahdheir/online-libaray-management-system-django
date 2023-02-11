@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+    <div class="card-header">Register</div>
+    <div class="card-body">
+        <form method="post" autocomplete="off" aria-autocomplete="none" id="register-form" class="form-group">
+            {% csrf_token %}
+            <!-- Start form row no 1 -->
+            <div class="row">
+                <div class="col-sm-6 mb-3">
+                    <label class="form-label">First Name </label>
+                    <input type="text" class="form-control {% if form.errors.first_name %} is-invalid {% endif %}"
+                        {% if form.first_name.value != None %} value="{{ form.first_name.value|stringformat:'s' }}"
+                        {% endif %} placeholder="first name" id="firstNameInput" name="first_name" />
+                    {% if form.errors.first_name %} <span
+                        class='firstName invalid-feedback'>{{ form.errors.first_name|first }}</span>{% endif %}
+                </div>
+                <div class="col-sm-6 mb-3">
+                    <label class="form-label">Last Name </label>
+                    <input type="text" class="form-control {% if form.errors.last_name %} is-invalid {% endif %}"
+                        {% if form.last_name.value != None %} value="{{ form.last_name.value|stringformat:'s' }}"
+                        {% endif %} placeholder="last name" id="lastNameInput" name="last_name" />
+                    {% if form.errors.last_name %} <span
+                        class='lastName invalid-feedback'>{{ form.errors.last_name|first }}</span>{% endif %}
+                </div>
+            </div>
+            <!-- End form row no 1 -->
+
+            <!-- Start form row no 2 -->
+            <div class="row">
+                <div class="col-sm-6 mb-3">
+                    <label class="form-label">Username</label>
+
+                    <input type="text" id="usernameInput" {% if form.username.value != None %}
+                        value="{{ form.username.value|stringformat:'s' }}" {% endif %}
+                        class="form-control {% if form.errors.username %} is-invalid {% endif %}"
+                        placeholder=" username" name="username" />
+                    {% if form.errors.username %} <span
+                        class='username invalid-feedback'>{{ form.errors.username|first }}</span>{% endif %}
+                </div>
+                <div class="col-sm-6 mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="emailInput" {% if form.email.value != None %}
+                        value="{{ form.email.value|stringformat:'s' }}" {% endif %}
+                        class="form-control {% if form.errors.email %} is-invalid {% endif %}"
+                        placeholder="email address" name="email" />
+                    {% if form.email.errors %} <span
+                        class='email1 invalid-feedback'>{{ form.errors.email|first }}</span>{% endif %}
+                </div>
+            </div>
+            <!-- End form row no 2 -->
+            <!-- Start form row no 3 -->
+            <div class="row">
+                <div class="col-sm-6 mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control {% if form.errors.password1 %} is-invalid {% endif %}"
+                        id="passwordInput" placeholder="password" name="password1" autocomplete="new-password" />
+                    {% if form.errors.password1 %} <span
+                        class='password invalid-feedback'>{{ form.errors.password1|first }}</span>{% endif %}
+                </div>
+                <div class="col-sm-6 mb-3">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" class=" form-control {% if form.errors.password2 %}is-invalid{% endif %}"
+                        placeholder="confirm password" id="passwordConfirmInput" name="password2"
+                        autocomplete="new-password" />
+                    {% if form.errors.password2 %} <span
+                        class='confirmPassword invalid-feedback'>{{ form.errors.password2|first }}</span>{% endif %}
+                </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <button type="submit" class="btn btn-primary">
+                        Register
+                    </button>
+                </div>
+                <div>
+                    <a href="login.html" class="text-primary">Already registered?</a>
+                </div>
+            </div>
+            <!-- End form row no 3 -->
+        </form>
+    </div>
+</div>
+{% endblock content %}

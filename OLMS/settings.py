@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 
+from django.contrib.messages import constants as messages
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -37,7 +40,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'core.apps.CoreConfig'
+    'core.apps.CoreConfig',
+    'authentication.apps.AuthenticationConfig',
+    'books.apps.BooksConfig',
 ]
 
 MIDDLEWARE = [
@@ -80,7 +85,16 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'Library_db',
+#         'USER': 'postgres',
+#         'PASSWORD': 'abdalla',
+#         'HOST': 'localhost',
+#         'PORT': '5432', # Default port 5432
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -127,3 +141,22 @@ MEDIA_URL = 'media/'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Authentication
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+# Messages Tags
+
+MESSAGE_TAGS = {
+    messages.INFO : 'alert alert-info',
+    messages.WARNING : 'alert alert-warning',
+    messages.ERROR : 'alert alert-danger',
+    messages.SUCCESS : 'alert alert-success',
+}
+
+# Email Settings
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = "localhost"
+EMAIL_PORT = 1025

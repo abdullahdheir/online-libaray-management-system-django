@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="card mb-3">
+    <h5 class="card-header">Profile</h5>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-4 mb-2">
+                <img src="{% if user.user.profile.picture  %} user.profile.picture.url {% else %} {% static 'images/default_user.jpg' %} {% endif %}"
+                    class="rounded-circle" width="100px" title="no image" alt="User Picture" />
+            </div>
+            <div class="col-sm-8" id="edit-form">
+                <div class="row">
+                    <div class="col-9">
+                        <div id="displayName" class="fs-6 fw-bold">
+                            {{ user.first_name }} {{ user.last_name }}
+                        </div>
+                    </div>
+                    <div class="col-3 text-end text-info">
+                        <a href="#" class="edit-profile-main">Edit</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card mb-3">
+    <h5 class="card-header">Account</h5>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-4">
+                <div class="fs-6 fw-bold">Username</div>
+            </div>
+            <div id="username" class="col-6">{{ user.username }}</div>
+            <div class="col-2 text-end text-info">
+                <a href="#" class="edit-account-username">Edit</a>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-4">
+                <div class="fs-6 fw-bold">Email</div>
+            </div>
+            <div id="email" class="col-6">{{ user.email }}</div>
+            <div class="col-2 text-end text-info">
+                <a href="#" class="edit-account-email">Edit</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-10">
+                <div class="fs-6 fw-bold">Password</div>
+            </div>
+            <div class="col-2 text-end text-info">
+                <a href="#" class="edit-account-password">Edit</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card mb-3">
+    <h5 class="card-header">Other</h5>
+    <div class="card-body">
+        <div class="d-flex justify-content-between">
+            <div class="fs-6 fw-bold">Fines</div>
+            <div class="text-danger">{{ user.profile.fines }}$</div>
+        </div>
+    </div>
+</div>
+<form action="" enctype="application/x-www-form-urlencoded"></form>
+{% endblock content %}

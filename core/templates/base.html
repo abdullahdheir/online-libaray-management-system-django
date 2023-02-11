@@ -1,17 +1,40 @@
-{% include './partials/header.html' %}
-{% include './partials/navbar.html' %}
+{% include './core/partials/header.html' %}
+{% include './core/partials/navbar.html' %}
 <main class="container mt-5">
     {% block content %}
-    <div class="panel">
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <p{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</p>
+            {% endfor %}
+    </div>
+    {% endif %}
+    <div>
         <h1>Welcome To The Our Library</h1>
+        {% if user.is_authenticated %}
+        <p>
+            If you want to read more books or tutorials and issues books
+        </p>
+        <a href="{% url 'books:book_list' %}" class="btn btn-primary">
+            Issue Books
+        </a>
+        {% else %}
         <p>
             If you want to read more books or tutorials you can register
             on our library and issues books
         </p>
-        <a href="register.html" class="btn btn-primary">
+        <a href="{% url 'register' %}" class="btn btn-primary">
             Register as Student
         </a>
+        {% endif %}
     </div>
     {% endblock content %}
 </main>
-{% include './partials/footer.html' %}
+{% if user.is_authenticated %}
+{{ user.id|json_script:"user_id" }}
+{{ user.first_name|json_script:"user_first_name" }}
+{{ user.last_name|json_script:"user_last_name" }}
+{{ user.username|json_script:"user_username" }}
+{{ user.email|json_script:"user_email" }}
+{% endif %}
+{% include './core/partials/footer.html' %}

@@ -1,4 +1,50 @@
 $(() => {
+    const toast = (message, status) => {
+        switch (status) {
+            case "success":
+                Toastify({
+                    text: message,
+                    duration: 3000,
+                    newWindow: true,
+                    close: true,
+                    gravity: "top", // `top` or `bottom`
+                    position: "center", // `left`, `center` or `right`
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    style: {
+                        background: "green",
+                    },
+                }).showToast();
+                break;
+            case "error":
+                Toastify({
+                    text: message,
+                    duration: 3000,
+                    newWindow: true,
+                    close: true,
+                    gravity: "top", // `top` or `bottom`
+                    position: "center", // `left`, `center` or `right`
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    style: {
+                        background: "red",
+                    },
+                }).showToast();
+                break;
+        }
+    };
+    const user_id = JSON.parse(document.getElementById("user_id").textContent);
+    const user_first_name = JSON.parse(
+        document.getElementById("user_first_name").textContent
+    );
+    const user_last_name = JSON.parse(
+        document.getElementById("user_last_name").textContent
+    );
+    const user_username = JSON.parse(
+        document.getElementById("user_username").textContent
+    );
+    const user_email = JSON.parse(
+        document.getElementById("user_email").textContent
+    );
+
     /* Start General Logic */
     $("#dataTable").DataTable({
         columnDefs: [
@@ -48,55 +94,63 @@ $(() => {
         $("body").append(html);
         $("#editProfileModal").modal("show");
     };
+    $(document).on("hidden.bs.modal", "#editProfileModal", function (e) {
+        $(this).remove();
+    });
 
-    const hideModal = () =>
-        $(document).on("hidden.bs.modal", "#editProfileModal", function (e) {
-            e.preventDefault();
-            $(this).remove();
-        });
+    const emailPattern =
+        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    $("#firstNameInput").keydown((e) => {
+    $(document).on('change',"#firstNameInput",(e) => {
         $(".firstName").remove();
         $("#firstNameInput").removeClass("is-invalid");
     });
-    $("#lastNameInput").keydown((e) => {
+    $(document).on('change',"#lastNameInput",(e) => {
         $(".lastName").remove();
         $("#lastNameInput").removeClass("is-invalid");
     });
-    $("#usernameInput").keydown((e) => {
+    $(document).on('change',"#usernameInput",(e) => {
         $(".username").remove();
         $("#usernameInput").removeClass("is-invalid");
     });
-    $("#emailInput").keydown((e) => {
+    $(document).on('change',"#emailInput",(e) => {
         $(".email").remove();
         $("#emailInput").removeClass("is-invalid");
     });
-    $("#passwordInput").keydown((e) => {
+    $(document).on('change',"#oldPasswordInput",(e) => {
+        console.log('ee');
+        $(".oldPassword").remove();
+        $("#oldPasswordInput").removeClass("is-invalid");
+    });
+    $(document).on('change',"#passwordInput",(e) => {
         $(".password").remove();
         $("#passwordInput").removeClass("is-invalid");
+    });
+    $(document).on('change',"#passwordConfirmInput",(e) => {
+        $(".confirmPassword").remove();
         $("#passwordConfirmInput").removeClass("is-invalid");
     });
-    $("#passwordConfirmInput").keydown((e) => {
-        $(".passwordConfirm").remove();
-        $("#passwordConfirmInput").removeClass("is-invalid");
+    $(document).on('change',"#oldPasswordInput",(e) => {
+        $(".oldPassword").remove();
+        $("#oldPasswordInput").removeClass("is-invalid");
     });
-    $("#imageInput").change((e) => {
+    $(document).on('change',"#imageInput",(e) => {
         $(".image").remove();
         $("#imageInput").removeClass("is-invalid");
     });
-    $("#titleInput").keydown((e) => {
+    $(document).on('change',"#titleInput",(e) => {
         $(".title").remove();
         $("#titleInput").removeClass("is-invalid");
     });
-    $("#descriptionInput").keydown((e) => {
+    $(document).on('change',"#descriptionInput",(e) => {
         $(".description").remove();
         $("#descriptionInput").removeClass("is-invalid");
     });
-    $("#authorInput").keydown((e) => {
+    $(document).on('change',"#authorInput",(e) => {
         $(".author").remove();
         $("#authorInput").removeClass("is-invalid");
     });
-    $("#quantityInput").keydown((e) => {
+    $(document).on('change',"#quantityInput",(e) => {
         $(".quantity").remove();
         $("#quantityInput").removeClass("is-invalid");
     });
@@ -105,8 +159,6 @@ $(() => {
     /* Start Validation Register Logic */
     $(document).on("submit", "#register-form", function (e) {
         e.preventDefault();
-        const emailPattern =
-            /^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/i;
         const firstNameInput = $("#firstNameInput");
         const firstName = firstNameInput.val();
         const usernameInput = $("#usernameInput");
@@ -159,7 +211,7 @@ $(() => {
                 "<span class='email invalid-feedback'>Email is required</span>"
             );
             errors.push("Email is required");
-        } else if (emailPattern.test(email)) {
+        } else if (!emailPattern.test(email)) {
             emailInput.addClass("is-invalid");
             $(".email").remove();
             emailInput.after(
@@ -175,12 +227,24 @@ $(() => {
                 "<span class='password invalid-feedback'>Password is required</span>"
             );
             errors.push("Password is required");
+        }
+        if (confirm_password === "") {
+            confirm_passwordInput.addClass("is-invalid");
+            $(".confirmPassword").remove();
+            confirm_passwordInput.after(
+                "<span class='confirmPassword invalid-feedback'>Confirm password is required</span>"
+            );
+            errors.push("Password is required");
         } else if (password !== confirm_password) {
             confirm_passwordInput.addClass("is-invalid");
             passwordInput.addClass("is-invalid");
             $(".password").remove();
-            confirm_passwordInput.after(
+            $(".confirmPassword").remove();
+            passwordInput.after(
                 "<span class='password invalid-feedback'>Passwords do not match</span>"
+            );
+            confirm_passwordInput.after(
+                "<span class='confirmPassword invalid-feedback'>Passwords do not match</span>"
             );
             errors.push("Passwords do not match");
         }
@@ -195,7 +259,7 @@ $(() => {
         const passwordInput = $("#passwordInput");
         const username = usernameInput.val();
         const password = passwordInput.val();
-
+        const errors = [];
         if (username === "") {
             usernameInput.addClass("is-invalid");
             $(".username").remove();
@@ -203,13 +267,6 @@ $(() => {
                 "<span class='username invalid-feedback'>Username is required</span>"
             );
             errors.push("Username is required");
-        } else if (username.length < 4) {
-            usernameInput.addClass("is-invalid");
-            $(".username").remove();
-            usernameInput.after(
-                "<span class='username invalid-feedback'>Username must be at least 4 characters</span>"
-            );
-            errors.push("Username must be at least 4 characters");
         }
         if (password === "") {
             passwordInput.addClass("is-invalid");
@@ -223,14 +280,12 @@ $(() => {
     });
     /* End Validation Login Logic */
 
-    /* Start Validation Forget Password Logic */
-    $(document).on("submit", "#forget-password-form", function (e) {
+    /* Start Validation Reset Password Logic */
+    $(document).on("submit", "#reset-password-form", function (e) {
         e.preventDefault();
-        const emailPattern =
-            /^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/i;
         const emailInput = $("#emailInput");
         const email = emailInput.val();
-
+        const errors = [];
         if (email === "") {
             emailInput.addClass("is-invalid");
             $(".email").remove();
@@ -238,7 +293,7 @@ $(() => {
                 "<span class='email invalid-feedback'>Email is required</span>"
             );
             errors.push("Email is required");
-        } else if (emailPattern.test(email)) {
+        } else if (!emailPattern.test(email)) {
             emailInput.addClass("is-invalid");
             $(".email").remove();
             emailInput.after(
@@ -248,15 +303,16 @@ $(() => {
         }
         if (!errors.length) return e.currentTarget.submit();
     });
-    /* End Validation Forget Password Logic */
+    /* End Validation Reset Password Logic */
 
-    /* Start Validation Reset Password Logic */
-    $(document).on("submit", "#reset-password-form", function (e) {
+    /* Start Validation Confirm Reset Password Logic */
+    $(document).on("submit", "#confirm-reset-password-form", function (e) {
         e.preventDefault();
         const passwordInput = $("#passwordInput");
         const password = passwordInput.val();
         const confirm_passwordInput = $("#passwordConfirmInput");
         const confirm_password = confirm_passwordInput.val();
+        const errors = [];
         if (password === "") {
             passwordInput.addClass("is-invalid");
             $(".password").remove();
@@ -264,12 +320,24 @@ $(() => {
                 "<span class='password invalid-feedback'>Password is required</span>"
             );
             errors.push("Password is required");
+        }
+        if (confirm_password === "") {
+            confirm_passwordInput.addClass("is-invalid");
+            $(".confirmPassword").remove();
+            confirm_passwordInput.after(
+                "<span class='confirmPassword invalid-feedback'>Confirm password is required</span>"
+            );
+            errors.push("Password is required");
         } else if (password !== confirm_password) {
             confirm_passwordInput.addClass("is-invalid");
             passwordInput.addClass("is-invalid");
             $(".password").remove();
-            confirm_passwordInput.after(
+            $(".confirmPassword").remove();
+            passwordInput.after(
                 "<span class='password invalid-feedback'>Passwords do not match</span>"
+            );
+            confirm_passwordInput.after(
+                "<span class='confirmPassword invalid-feedback'>Passwords do not match</span>"
             );
             errors.push("Passwords do not match");
         }
@@ -350,6 +418,7 @@ $(() => {
 
     $(document).on("click", ".edit-profile-main", function (e) {
         e.preventDefault();
+
         const form = `<form class="profile-main-form" role="form">
                             <!-- Start from row no 1 -->
                             <div class="row">
@@ -361,6 +430,7 @@ $(() => {
                                         type="text"
                                         id="firstNameInput"
                                         class="mb-3 form-control"
+                                        value="${user_first_name}"
                                         placeholder="first name"
                                         name="first_name"
                                     />
@@ -370,6 +440,7 @@ $(() => {
                                     <input
                                         type="text"
                                         id="lastNameInput"
+                                        value="${user_last_name}"
                                         class="mb-3 form-control"
                                         placeholder="last name"
                                         name="last_name"
@@ -386,6 +457,7 @@ $(() => {
         const firstName = firstNameInput.val();
         const lastNameInput = $("#lastNameInput");
         const lastName = lastNameInput.val();
+
         const errors = [];
 
         if (firstName === "") {
@@ -405,7 +477,26 @@ $(() => {
             errors.push("Last name is required");
         }
         if (!errors.length) {
-            hideModal();
+            $.ajax({
+                type: "POST",
+                url: `/profile/update`,
+                data: { first_name: firstName, last_name: lastName },
+                success: function (res) {
+                    if (res.status === "success") {
+                        $("#displayName").html(
+                            `${res.data.first_name} ${res.data.last_name}`
+                        );
+                        $("#editProfileModal").modal("hide");
+                        toast("User Profile Updated Successfully", "success");
+                    } else if (res.status === "error") {
+                        toast("Something went wrong", "error");
+                    }
+                },
+                error: function (jqXHR) {
+                    console.log(jqXHR);
+                },
+            });
+            // ;
         }
     });
     /* End Profile Logic */
@@ -421,6 +512,7 @@ $(() => {
                                     </label>
                                     <input
                                         type="text"
+                                        value="${user_username}"
                                         id="usernameInput"
                                         class="mb-3 form-control"
                                         placeholder="username"
@@ -443,6 +535,7 @@ $(() => {
                                     <input
                                         type="email"
                                         id="emailInput"
+                                        value="${user_email}"
                                         class="mb-3 form-control"
                                         placeholder="email"
                                     />
@@ -459,11 +552,11 @@ $(() => {
                             <div class="row">
                                 <div class="col-sm-12">
                                     <label class="form-label"
-                                        >Password
+                                        >Old Password
                                     </label>
                                     <input
                                         type="password"
-                                        id="passwordInput"
+                                        id="oldPasswordInput"
                                         class="mb-3 form-control"
                                         placeholder="password"
                                     />
@@ -474,17 +567,32 @@ $(() => {
                             <div class="row">
                                 <div class="col-sm-12">
                                     <label class="form-label"
-                                        >Confirm Password
+                                        >New Password
                                     </label>
                                     <input
                                         type="password"
-                                        id="confirmPasswordInput"
+                                        id="passwordInput"
+                                        class="mb-3 form-control"
+                                        placeholder="password"
+                                    />
+                                </div>
+                            </div>
+                            <!-- End from row no 2 -->
+                            <!-- Start from row no 3 -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="form-label"
+                                        >Confirm New Password
+                                    </label>
+                                    <input
+                                        type="password"
+                                        id="passwordConfirmInput"
                                         class="mb-3 form-control"
                                         placeholder="confirm password"
                                     />
                                 </div>
                             </div>
-                            <!-- End from row no 2 -->
+                            <!-- End from row no 3 -->
                         </form>`;
         modal("Edit Password", form);
     });
@@ -493,7 +601,6 @@ $(() => {
         e.preventDefault();
         const usernameInput = $("#usernameInput");
         const username = usernameInput.val();
-
         const errors = [];
 
         if (username === "") {
@@ -513,7 +620,30 @@ $(() => {
         }
 
         if (!errors.length) {
-            hideModal();
+            $.ajax({
+                type: "POST",
+                url: `/profile/update`,
+                data: { username: username },
+                success: function (res) {
+                    if (res.status === "success") {
+                        $("#username").html(res.data.username);
+                        $("#editProfileModal").modal("hide");
+                        toast("User Profile Updated Successfully", "success");
+                    } else if (res.status === "error") {
+                        const err = JSON.parse(res.error);
+                        if (err?.username) {
+                            usernameInput.addClass("is-invalid");
+                            usernameInput.after(
+                                `<span class='username invalid-feedback'>${err.username[0].message}</span>`
+                            );
+                        }
+                        toast("Something went wrong", "error");
+                    }
+                },
+                error: function (jqXHR) {
+                    console.log(jqXHR);
+                },
+            });
         }
     });
     $(document).on("submit", ".account-email-form", function (e) {
@@ -529,7 +659,7 @@ $(() => {
                 "<span class='email invalid-feedback'>Email is required</span>"
             );
             errors.push("Email is required");
-        } else if (emailPattern.test(email)) {
+        } else if (!emailPattern.test(email)) {
             emailInput.addClass("is-invalid");
             $(".email").remove();
             emailInput.after(
@@ -538,17 +668,49 @@ $(() => {
             errors.push("Email is invalid");
         }
         if (!errors.length) {
-            hideModal();
+            $.ajax({
+                type: "POST",
+                url: `/profile/update`,
+                data: { email: email },
+                success: function (res) {
+                    if (res.status === "success") {
+                        $("#email").html(res.data.email);
+                        $("#editProfileModal").modal("hide");
+                        toast("User Profile Updated Successfully", "success");
+                    } else if (res.status === "error") {
+                        const err = JSON.parse(res.error);
+                        emailInput.addClass("is-invalid");
+                        $(".email").remove();
+                        emailInput.after(
+                            `<span class='email invalid-feedback'>${err?.email[0].message}</span>`
+                        );
+                        toast("Something went wrong", "error");
+                    }
+                },
+                error: function (jqXHR) {
+                    console.log(jqXHR);
+                },
+            });
         }
     });
-    $(document).on("submit", ".account-email-form", function (e) {
+    $(document).on("submit", ".account-password-form", function (e) {
         e.preventDefault();
-        const password = passwordInput.val();
+        const oldPasswordInput = $("#oldPasswordInput");
+        const oldPassword = oldPasswordInput.val();
         const passwordInput = $("#passwordInput");
+        const password = passwordInput.val();
         const confirm_passwordInput = $("#passwordConfirmInput");
         const confirm_password = confirm_passwordInput.val();
         const errors = [];
 
+        if (oldPassword === "") {
+            oldPasswordInput.addClass("is-invalid");
+            $(".password").remove();
+            oldPasswordInput.after(
+                "<span class='oldPassword invalid-feedback'>Old Password is required</span>"
+            );
+            errors.push("Password is required");
+        }
         if (password === "") {
             passwordInput.addClass("is-invalid");
             $(".password").remove();
@@ -556,20 +718,71 @@ $(() => {
                 "<span class='password invalid-feedback'>Password is required</span>"
             );
             errors.push("Password is required");
+        }
+        if (confirm_password === "") {
+            confirm_passwordInput.addClass("is-invalid");
+            $(".confirmPassword").remove();
+            confirm_passwordInput.after(
+                "<span class='confirmPassword invalid-feedback'>Confirm password is required</span>"
+            );
+            errors.push("Password is required");
         } else if (password !== confirm_password) {
             confirm_passwordInput.addClass("is-invalid");
             passwordInput.addClass("is-invalid");
             $(".password").remove();
-            confirm_passwordInput.after(
+            $(".confirmPassword").remove();
+            passwordInput.after(
                 "<span class='password invalid-feedback'>Passwords do not match</span>"
+            );
+            confirm_passwordInput.after(
+                "<span class='confirmPassword invalid-feedback'>Passwords do not match</span>"
             );
             errors.push("Passwords do not match");
         }
         if (!errors.length) {
-            hideModal();
+            $.ajax({
+                type: "POST",
+                url: `/auth/api/password_change`,
+                data: {
+                    new_password2: confirm_password,
+                    new_password1: password,
+                    old_password: oldPassword,
+                },
+                success: function (res) {
+                    if (res.status === "success") {
+                        $("#editProfileModal").modal("hide");
+                        toast("User Profile Updated Successfully", "success");
+                    } else if (res.status === "error") {
+                        const err = JSON.parse(res.error);
+                        if (err?.old_password) {
+                            oldPasswordInput.addClass("is-invalid");
+                            $(".password").remove();
+                            oldPasswordInput.after(
+                                `<span class='oldPassword invalid-feedback'>${err.old_password[0].message}</span>`
+                            );
+                        }
+                        if (err?.new_password1) {
+                            passwordInput.addClass("is-invalid");
+                            $(".password").remove();
+                            passwordInput.after(
+                                `<span class='password invalid-feedback'>${err.new_password1[0].message}</span>`
+                            );
+                        }
+                        if (err?.new_password2) {
+                            confirm_passwordInput.addClass("is-invalid");
+                            $(".confirmPassword").remove();
+                            confirm_passwordInput.after(
+                                `<span class='confirmPassword invalid-feedback'>${err.new_password2[0].message}</span>`
+                            );
+                        }
+                        toast("Something went wrong", "error");
+                    }
+                },
+                error: function (jqXHR) {
+                    console.log(jqXHR);
+                },
+            });
         }
     });
     /* End Account Logic */
-
-    hideModal();
 });

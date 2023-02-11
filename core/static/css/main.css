@@ -5,3 +5,9 @@
 a {
     text-decoration: none;
 }
+
+.book-description {
+    height: 150px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

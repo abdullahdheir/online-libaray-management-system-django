@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name="Student",
+            name="Profile",
             fields=[
                 (
                     "user",
@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                 (
                     "picture",
                     models.ImageField(
-                        blank=True, null=True, upload_to="images/student_profile/"
+                        blank=True, null=True, upload_to="images/profile/"
                     ),
                 ),
                 ("fines", models.SmallIntegerField(default=0)),
