@@ -7,7 +7,7 @@
 <script src="{% static 'js/main.js' %}"></script>
 {% if messages %}
 {% for message in messages %}
-{{ message.tag }}
+{% if message.level == 25 %}
 <script type="text/javascript">
     $(() => {
         Toastify({
@@ -24,6 +24,25 @@
         }).showToast();
     });
 </script>
+{% endif %}
+{% if message.level == 40 %}
+<script type="text/javascript">
+    $(() => {
+        Toastify({
+            text: "{{ message }}",
+            duration: 3000,
+            newWindow: true,
+            close: true,
+            gravity: "top", // `top` or `bottom`
+            position: "center", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+                background: "#FF5349",
+            },
+        }).showToast();
+    });
+</script>
+{% endif %}
 {% endfor %}
 {% endif %}
 </body>

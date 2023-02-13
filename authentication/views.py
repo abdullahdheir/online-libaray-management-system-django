@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeDoneView, PasswordChangeView, PasswordResetCompleteView, PasswordResetView, PasswordResetConfirmView, PasswordResetDoneView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
 from .forms import (UserLoginForm, UserRegisterForm)
 from django.views.generic import CreateView
-from django.contrib.messages import add_message, SUCCESS, INFO
-from django.contrib.auth import login,authenticate
-from django.contrib.messages.views import  SuccessMessageMixin
+from django.contrib.messages import add_message, SUCCESS
+from django.contrib.auth import login
+from django.contrib.messages.views import SuccessMessageMixin
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.forms import PasswordChangeForm
 from django.http import JsonResponse
@@ -19,7 +19,7 @@ def password_change(request):
         if request.user.is_authenticated:
             if request.method == 'POST':
                 print(request.POST['new_password2'])
-                form = PasswordChangeForm(user=request.user,data=request.POST)
+                form = PasswordChangeForm(user=request.user, data=request.POST)
                 if form.is_valid():
                     form.save()
                     update_session_auth_hash(request, form.user)
@@ -28,7 +28,8 @@ def password_change(request):
                     print(form.cleaned_data)
                     raise ValidationError(form.errors.as_json())
     except ValidationError as error:
-        return JsonResponse({"status":"error","error":error.messages})
+        return JsonResponse({"status": "error", "error": error.messages})
+
 
 class UserLoginView(LoginView):
     template_name = 'login.html'
@@ -45,7 +46,7 @@ class UserRegisterView(CreateView):
         user = form.save()
         login(self.request, user)
         add_message(
-            self.request, message=f"Hi {user}, thx for register now can you issue any books are you want?", level=SUCCESS
+            self.request, message=f"Hi {user}, thx for registration. Now you can issue any books are you want.", level=SUCCESS
         )
         return result
 
@@ -53,19 +54,19 @@ class UserRegisterView(CreateView):
 class UserLogoutView(LogoutView):
     pass
 
+
 class UserPasswordChangeView(PasswordChangeView):
     pass
 
 
-class UserPasswordResetView(SuccessMessageMixin,PasswordResetView):
+class UserPasswordResetView(SuccessMessageMixin, PasswordResetView):
 
     template_name = 'password_reset.html'
     success_url = reverse_lazy('login')
     success_message = f"If you entered your email, we will send you an email with a link to reset your password"
 
 
-class UserPasswordResetConfirmView(SuccessMessageMixin,PasswordResetConfirmView):
+class UserPasswordResetConfirmView(SuccessMessageMixin, PasswordResetConfirmView):
     template_name = 'password_reset_confirm.html'
     success_url = reverse_lazy('login')
     success_message = "Your password has been reset successfully"
-

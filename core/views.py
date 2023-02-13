@@ -21,7 +21,6 @@ from books.models import (BookIssue)
 class ProfileView(TemplateView):
     template_name = 'core/profile/index.html'
 
-        
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['issues_books_list'] = BookIssue.objects.filter(
@@ -42,12 +41,12 @@ def profile_picture_update(request: HttpRequest):
                 else:
                     raise ValidationError(profile_form.errors)
             else:
-                raise ValidationError(
-                    "You must be logged in to update your profile picture")
+                return JsonResponse({"status": "error", "error": ["You must be logged in to update your profile picture"]}, status=401)
         else:
             return HttpResponseRedirect(reverse_lazy('core:profile'))
     except ValidationError as error:
-            return JsonResponse({"status": "error", "error": error.messages})
+        return JsonResponse({"status": "error", "error": error.messages})
+
 
 @csrf_exempt
 def profile_update(request: HttpRequest):
@@ -71,12 +70,11 @@ def profile_update(request: HttpRequest):
                 else:
                     raise ValidationError(user_form.errors.as_json())
             else:
-                raise ValidationError(
-                    'You must be logged in to update your profile')
+                return JsonResponse({"status": "error", "error": ["You must be logged in to update your profile"]}, status=401)
         else:
             return HttpResponseRedirect(reverse_lazy('core:profile'))
     except ValidationError as error:
-        return JsonResponse({"status": "error", "error": error.messages})
+        return JsonResponse({"status": "error", "error": error.messages}, status=401)
 
 
 @method_decorator([login_required(login_url=reverse_lazy('login')), group_required(['admin'], login_url=reverse_lazy('login'))], name='dispatch')
@@ -108,6 +106,7 @@ def student_delete(request: HttpRequest, pk: int):
     try:
         student = get_object_or_404(User, pk=pk)
         student.delete()
+        messages.success(request, 'Student has been successfully deleted')
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     except ObjectDoesNotExist:
         return Http404("Student does not exist")
@@ -126,15 +125,15 @@ def book_delete(request: HttpRequest, pk: int):
     try:
         book = get_object_or_404(Book, pk=pk)
         book.delete()
-        messages.success(request, 'Book deleted successfully')
+        messages.success(request, 'Book has been successfully deleted')
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     except ObjectDoesNotExist:
-        return Http404("book does not exist")
+        return Http404("Book does not exist")
 
 
 @method_decorator([login_required(login_url=reverse_lazy('login')), group_required(['admin'], login_url=reverse_lazy('login'))], name='dispatch')
-class BookCreateListView(SuccessMessageMixin, CreateView):
+class BookCreateView(SuccessMessageMixin, CreateView):
     template_name = 'core/dashboard/book_form.html'
     form_class = BookForm
     success_url = reverse_lazy('core:book_form')
-    success_message = "Book created successfully"
+    success_message = "Book has been successfully created"

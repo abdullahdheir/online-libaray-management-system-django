@@ -10,7 +10,7 @@ class Profile(models.Model):
         primary_key=True,
     )
     picture = models.ImageField(
-        blank=True, null=True, upload_to='images/profile/')
+        blank=True, null=True, upload_to=f'images/profile/')
     fines = models.SmallIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

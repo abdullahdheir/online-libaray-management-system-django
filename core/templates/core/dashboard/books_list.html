@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<a href="{% url 'core:book_form' %}" class="btn btn-primary mb-3"><i class="fa fa-plus"></i>&nbsp;Add Book</a>
+<a href="{% url 'core:dashboard_book_create_form' %}" class="btn btn-primary mb-3"><i class="fa fa-plus"></i>&nbsp;Add Book</a>
 <table id="dataTable" class="table table-striped" style="width: 100%">
     <thead>
         <tr>
@@ -24,7 +24,7 @@
             <td>{{ book.quantity }}</td>
             <td>2013-08-11</td>
             <td class="">
-                <a href="{% url 'core:book_delete' book.id %}" onclick="confirm('Are you sure?')" class="text-danger"><i
+                <a href="{% url 'core:dashboard_book_delete' book.id %}" onclick="confirm('Are you sure?')" class="text-danger"><i
                         class="fa fa-trash"></i>
                 </a>
             </td>

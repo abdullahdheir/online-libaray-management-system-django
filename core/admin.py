@@ -39,9 +39,10 @@ def auto_delete_profile_picture_on_update(sender, instance, **kwargs):
     instance == Profile Object after update
     old_profile == Profile Object before update
     """
-    old_profile = Profile.objects.get(pk=instance.pk)
-    if old_profile.picture:
-        if os.path.isfile(old_profile.picture.path):
-            os.remove(old_profile.picture.path)
+    if instance.picture:
+        old_profile = Profile.objects.get(pk=instance.pk)
+        if old_profile.picture:
+            if os.path.isfile(old_profile.picture.path):
+                os.remove(old_profile.picture.path)
 
 admin.site.register(Profile)

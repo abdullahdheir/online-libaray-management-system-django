@@ -23,7 +23,7 @@
             <td>{{ student.email }}</td>
             <td>${{ student.profile.fines }}</td>
             <td>
-                <a href="{% url 'core:student_delete' student.id %}" onclick="confirm('Are you sure?')" class="text-danger"><i class="fa fa-trash"></i>
+                <a href="{% url 'core:dashboard_student_delete' student.id %}" onclick="confirm('Are you sure?')" class="text-danger"><i class="fa fa-trash"></i>
                 </a>
             </td>
         </tr>
