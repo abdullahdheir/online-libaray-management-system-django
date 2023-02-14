@@ -135,5 +135,5 @@ def book_delete(request: HttpRequest, pk: int):
 class BookCreateView(SuccessMessageMixin, CreateView):
     template_name = 'core/dashboard/book_form.html'
     form_class = BookForm
-    success_url = reverse_lazy('core:book_form')
+    success_url = reverse_lazy('core:dashboard_book_create_form')
     success_message = "Book has been successfully created"

@@ -31,9 +31,10 @@ def password_change(request):
         return JsonResponse({"status": "error", "error": error.messages})
 
 
-class UserLoginView(LoginView):
+class UserLoginView(SuccessMessageMixin,LoginView):
     template_name = 'login.html'
     form_class = UserLoginForm
+    success_message="Login successfully"
 
 
 class UserRegisterView(CreateView):
@@ -51,9 +52,8 @@ class UserRegisterView(CreateView):
         return result
 
 
-class UserLogoutView(LogoutView):
-    pass
-
+class UserLogoutView(SuccessMessageMixin,LogoutView):
+    success_message = "Logout successfully"
 
 class UserPasswordChangeView(PasswordChangeView):
     pass
