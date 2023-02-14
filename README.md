@@ -15,21 +15,21 @@ OLMS\Script\activate
 
 To run this project on your pc fllow the below step:
 
-### Step 1 (in command line):
+### Step 1 (command line):
 
 ```
 git clone https://github.com/abddhe/online-libaray-management-system-django.git
 cd online-libaray-management-system-django
 ```
 
-### Step 2 (in command line):
+### Step 2 (command line):
 
 ```
 pip install -r requirement.txt
 py manage.py runserver 8000
 ```
 
-### Step 3 (in browser):
+### Step 3:
 
 - Paste this link in the browser `http://127.0.0.1:8000`
 
