@@ -25,7 +25,7 @@ cd online-libaray-management-system-django
 ### Step 2 (command line):
 
 ```
-pip install -r requirement.txt
+pip install -r requirements.txt
 py manage.py runserver 8000
 ```
 
