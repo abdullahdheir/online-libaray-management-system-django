@@ -105,7 +105,6 @@ $(() => {
         $("#emailInput").removeClass("is-invalid");
     });
     $(document).on("change", "#oldPasswordInput", (e) => {
-        console.log("ee");
         $(".oldPassword").remove();
         $("#oldPasswordInput").removeClass("is-invalid");
     });
@@ -549,7 +548,7 @@ $(() => {
         e.preventDefault();
         const form = `<form class="account-password-form" role="form">
                             <!-- Start from row no 1 -->
-                            <div class="row">
+                            <div class="row mb-3">
                                 <div class="col-sm-12">
                                     <label class="form-label"
                                         >Old Password
@@ -557,14 +556,14 @@ $(() => {
                                     <input
                                         type="password"
                                         id="oldPasswordInput"
-                                        class="mb-3 form-control"
+                                        class=" form-control"
                                         placeholder="password"
                                     />
                                 </div>
                             </div>
                             <!-- End from row no 1 -->
                             <!-- Start from row no 2 -->
-                            <div class="row">
+                            <div class="row mb-3">
                                 <div class="col-sm-12">
                                     <label class="form-label"
                                         >New Password
@@ -572,14 +571,14 @@ $(() => {
                                     <input
                                         type="password"
                                         id="passwordInput"
-                                        class="mb-3 form-control"
+                                        class=" form-control"
                                         placeholder="password"
                                     />
                                 </div>
                             </div>
                             <!-- End from row no 2 -->
                             <!-- Start from row no 3 -->
-                            <div class="row">
+                            <div class="row mb-3">
                                 <div class="col-sm-12">
                                     <label class="form-label"
                                         >Confirm New Password
@@ -587,7 +586,7 @@ $(() => {
                                     <input
                                         type="password"
                                         id="passwordConfirmInput"
-                                        class="mb-3 form-control"
+                                        class=" form-control"
                                         placeholder="confirm password"
                                     />
                                 </div>

@@ -34,15 +34,16 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'core.apps.CoreConfig',
+    'authentication.apps.AuthenticationConfig',
+    'books.apps.BooksConfig',
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'core.apps.CoreConfig',
-    'authentication.apps.AuthenticationConfig',
-    'books.apps.BooksConfig',
+    
 ]
 
 MIDDLEWARE = [
@@ -85,6 +86,14 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mongoengine",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
@@ -95,6 +104,7 @@ DATABASES = {
 #         'PORT': '5432', # Default port 5432
 #     }
 # }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
