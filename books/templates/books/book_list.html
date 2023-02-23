@@ -2,7 +2,7 @@
 {% block content %}
 <div class="row">
     {% for book in book_list %}
-    <div class="col-xl-3 col-md-4 col-sm-4 mb-3">
+    <div class="col-xl-3 col-md-4 col-sm-4">
         <div class="card">
             <a href="{% url 'books:book_detail' book.id %}">
                 <img src="{{ book.image.url }}" height="250px" width="100%" alt="{{ book.title }}" />
@@ -11,9 +11,6 @@
                 <h5 class="card-title">
                     <div class="d-flex justify-content-between align-items-center">
                         <p>{{ book.title }}</p>
-                        <p class="fs-6 text-secondary">
-                            Available: 10
-                        </p>
                     </div>
                 </h5>
 

@@ -41,7 +41,7 @@ def auto_delete_profile_picture_on_update(sender, instance, **kwargs):
     """
     if instance.picture:
         old_profile = Profile.objects.get(pk=instance.pk)
-        if old_profile.picture:
+        if old_profile.picture.path != instance.picture.path:
             if os.path.isfile(old_profile.picture.path):
                 os.remove(old_profile.picture.path)
 

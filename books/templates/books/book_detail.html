@@ -17,7 +17,7 @@
         <div class="row mb-4">
             <div>
                 <strong>Available:</strong>
-                <span class="text-muted">10</span>
+                <span class="text-muted">{{ book.quantity }}</span>
             </div>
         </div>
         <div class="row mb-4">
@@ -28,7 +28,11 @@
         </div>
         <div id="issue" class="row mb-4">
             {% if user.is_authenticated %}
-                {% if user|has_group:"admin" %}
+                {% if book.quantity == 0 %}
+                <p class="alert text-center alert-secondray">
+                    This book is not available
+                </p>
+                {% elif user|has_group:"admin" %}
                 <p class="alert text-center alert-warning">
                     Cannot issue a book for an admin
                 </p>

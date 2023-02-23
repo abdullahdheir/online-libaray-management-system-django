@@ -88,6 +88,28 @@ DATABASES = {
 }
 
 # DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'online',
+#         'USER': 'postgres',
+#         'PASSWORD': 'abdalla',
+#         'HOST': 'localhost',
+#         'PORT': '5432', # Default port 5432
+#     }
+# }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'online',
+#         'USER': 'root', # Default username is root
+#         'PASSWORD': '', # Default password is ''
+#         'HOST': 'localhost',
+#         'PORT': '3306', # Default port 3306
+#     }
+# }
+
+# DATABASES = {
 #     "default": {
 #         "ENGINE": "django.db.backends.mongoengine",
 #         "NAME": BASE_DIR / "db.sqlite3",
