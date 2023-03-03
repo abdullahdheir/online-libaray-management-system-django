@@ -100,8 +100,8 @@ class StudentListView(ListView):
                                    ).exclude(groups=(Group.objects.get(name="admin").pk))
 
 
-@login_required(login_url=reverse_lazy('login'))
 @group_required(['admin'], login_url=reverse_lazy('login'))
+@login_required(login_url=reverse_lazy('login'))
 def student_delete(request: HttpRequest, pk: int):
     try:
         student = get_object_or_404(User, pk=pk)
@@ -119,8 +119,8 @@ class BookListView(ListView):
     model = Book
 
 
-@login_required(login_url=reverse_lazy('login'))
 @group_required(['admin'], login_url=reverse_lazy('login'))
+@login_required(login_url=reverse_lazy('login'))
 def book_delete(request: HttpRequest, pk: int):
     try:
         book = get_object_or_404(Book, pk=pk)
